@@ -1,44 +1,33 @@
 title_lst = []
 tag_lst = []
 from nltk import PorterStemmer
-from time import sleep
 stemmer = PorterStemmer()
 
-
-with open(r"CS481_Assignment_2/dataset.csv", "r") as f:
-    #Title Line
-    f.readline()
-
+with open(r"CS481_Assignment_2/dataset.csv", "r", encoding="utf8") as f:
     while True:
-        try:
-            entry = f.readline()[1:]
-            count = 0
-            letter = 0
-            while count != 1:
-                if entry[letter:letter+9] == '",Liberal' or entry[letter:letter+14] == '", Conservative':
-                    count += 1
-                letter += 1
-            title = entry[:letter-1]
-            split_title = title.split(" ")
+        entry = f.readline()
+        if entry != "":
+            title = ""
+            if entry[-8:] == "Liberal\n":
+                split_title = entry[:-9].split(" ")
+                tag_lst.append("liberal")
+                
+            else:
+                split_title = entry[:-14].split(" ")
+                tag_lst.append("conservative")
+
             for word in split_title:
-                word.replace(",", "")
-                stemmer.stem(word)
-
-            count = 0
-            letter2 = letter
-            while count != 2:
-                if entry[letter2] == ',':
-                    count += 1
-                letter2 += 1
-            tag = entry[letter+1:letter2-1]
-
+                word = word.replace(",", "")
+                title += stemmer.stem(word) + " "
             title_lst.append(title)
-            tag_lst.append(tag)
-        except:
+        else:
             break
         
+        
 
-with open(r"CS481_Assignment_2/PreProcessed.csv", "w") as f:
+with open(r"CS481_Assignment_2/PreProcessed.csv", "a", encoding="utf8") as f:
     for i in range(len(title_lst)):
-        f.write(title_lst[i])
-        f.write(tag_lst[i])
+        f.write(title_lst[i] + "\n")
+        f.write(tag_lst[i] + "\n")
+
+print("Preprocessing Done!")
