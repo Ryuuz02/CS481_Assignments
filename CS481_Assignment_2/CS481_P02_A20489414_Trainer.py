@@ -24,7 +24,6 @@ with open(r"CS481_Assignment_2/Titles.csv", "r", encoding="utf8") as f1:
 
 conservative_probability = sum(train_tag_list) / len(train_tag_list)
 liberal_probability = 1 - conservative_probability
-
 liberal_probability_dict = {}
 conservative_probability_dict = {}
 word_count = {}
